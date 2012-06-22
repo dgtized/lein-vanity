@@ -6,14 +6,14 @@
 (defn kind-of [line]
   (cond (re-find #"^\s*;" line) :comment
         (re-find #"^\s*$" line) :blank
-        :else :code))
+        :else :LOC))
 
 (defn line-stats [file]
   (with-open [rdr (clojure.java.io/reader file)]
     (reduce (fn [counts line]
               (update-in counts [(kind-of line)] inc))
-            {:file (str file)
-             :code 0 :comment 0 :blank 0}
+            {:source (str file)
+             :LOC 0 :comment 0 :blank 0}
             (line-seq rdr))))
 
 (defn path-stats [path]
@@ -35,6 +35,6 @@
         relative-cwd (partial relative-file cwd)
         source (map path-stats (:source-paths project))
         test (map path-stats (:test-paths project))
-        all (map #(update-in % [:file] relative-cwd)
+        all (map #(update-in % [:source] relative-cwd)
                  (flatten [source test]))]
     (print-table all)))
