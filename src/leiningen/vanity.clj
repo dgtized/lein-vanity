@@ -11,8 +11,7 @@
 (defn line-stats [file]
   (with-open [rdr (clojure.java.io/reader file)]
     (reduce (fn [counts line]
-              (let [kind (kind-of line)]
-                (assoc counts kind (inc (counts kind)))))
+              (update-in counts [(kind-of line)] inc))
             {:file (str file)
              :code 0 :comment 0 :blank 0}
             (line-seq rdr))))
@@ -33,8 +32,9 @@
   "Lines of code statistics for vanity's sake"
   [project]
   (let [cwd (-> "" io/file .getAbsoluteFile str)
+        relative-cwd (partial relative-file cwd)
         source (map path-stats (:source-paths project))
         test (map path-stats (:test-paths project))
-        all (map #(assoc % :file (relative-file cwd (:file %)))
+        all (map #(update-in % [:file] relative-cwd)
                  (flatten [source test]))]
     (print-table all)))
