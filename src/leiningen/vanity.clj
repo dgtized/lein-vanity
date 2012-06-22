@@ -3,6 +3,13 @@
             [bultitude.core :as b])
   (:use clojure.pprint))
 
+(defn relative-file
+  "Return a path relative to base"
+  [base path]
+  (-> path
+      (clojure.string/replace-first (str base) "")
+      (clojure.string/replace-first #"^/" "")))
+
 (defn kind-of [line]
   (cond (re-find #"^\s*;" line) :comment
         (re-find #"^\s*$" line) :blank
@@ -17,24 +24,18 @@
             (line-seq rdr))))
 
 (defn path-stats [path]
-  (let [namespaces (b/namespaces-in-dir path)
+  (let [relative-cwd (partial relative-file
+                              (-> "" io/file .getAbsoluteFile str))
+        namespaces (b/namespaces-in-dir path)
         files (map b/path-for namespaces)]
-    (map #(line-stats (io/file path %1)) files)))
-
-(defn relative-file
-  "Return a path relative to base"
-  [base path]
-  (-> path
-      (clojure.string/replace-first (str base) "")
-      (clojure.string/replace-first #"^/" "")))
+    (map #(-> (io/file path %1)
+              line-stats
+              (update-in [:source] relative-cwd)) files)))
 
 (defn vanity
   "Lines of code statistics for vanity's sake"
   [project]
-  (let [cwd (-> "" io/file .getAbsoluteFile str)
-        relative-cwd (partial relative-file cwd)
-        source (map path-stats (:source-paths project))
-        test (map path-stats (:test-paths project))
-        all (map #(update-in % [:source] relative-cwd)
-                 (flatten [source test]))]
-    (print-table all)))
+  (let [source (mapcat path-stats (:source-paths project))
+        test (mapcat path-stats (:test-paths project))
+        all [source test]]
+    (print-table (flatten all))))
