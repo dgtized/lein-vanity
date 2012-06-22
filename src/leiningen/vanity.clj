@@ -22,9 +22,19 @@
         files (map b/path-for namespaces)]
     (map #(line-stats (io/file path %1)) files)))
 
+(defn relative-file
+  "Return a path relative to base"
+  [base path]
+  (-> path
+      (clojure.string/replace-first (str base) "")
+      (clojure.string/replace-first #"^/" "")))
+
 (defn vanity
   "Lines of code statistics for vanity's sake"
   [project]
-  (let [source (map path-stats (:source-paths project))
-        test (map path-stats (:test-paths project))]
-    (print-table (flatten [source test]))))
+  (let [cwd (-> "" io/file .getAbsoluteFile str)
+        source (map path-stats (:source-paths project))
+        test (map path-stats (:test-paths project))
+        all (map #(assoc % :file (relative-file cwd (:file %)))
+                 (flatten [source test]))]
+    (print-table all)))
