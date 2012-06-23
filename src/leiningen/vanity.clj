@@ -37,7 +37,9 @@
   [source-name stats]
   (let [numeric-stats (map #(dissoc % :source) stats)
         subtotals (apply merge-with + (vec numeric-stats))]
-    (assoc subtotals :source source-name)))
+    (if (< (count stats) 2)
+      '()
+      (assoc subtotals :source source-name))))
 
 (defn vanity
   "Lines of code statistics for vanity's sake"
