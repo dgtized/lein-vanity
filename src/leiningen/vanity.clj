@@ -32,10 +32,21 @@
               line-stats
               (update-in [:source] relative-cwd)) files)))
 
+(defn subtotal
+  "Return a subtotal for all numeric stats and rename source"
+  [source-name stats]
+  (let [numeric-stats (map #(dissoc % :source) stats)
+        subtotals (apply merge-with + (vec numeric-stats))]
+    (assoc subtotals :source source-name)))
+
 (defn vanity
   "Lines of code statistics for vanity's sake"
   [project]
   (let [source (mapcat path-stats (:source-paths project))
         test (mapcat path-stats (:test-paths project))
-        all [source test]]
+        all [source
+             (subtotal "- Subtotal Source" source)
+             test
+             (subtotal "- Subtotal Test" test)
+             (subtotal "- Total" (concat source test))]]
     (print-table (flatten all))))
