@@ -2,6 +2,13 @@
 
 Lines of code statistics for vanity's sake
 
+## Install
+
+Modify `~/.lein/profiles.clj` to include:
+```clojure
+{:user {:plugins [[lein-vanity "0.1.0"]]}}
+```
+
 ## Usage
 
 ```
