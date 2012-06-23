@@ -1,4 +1,4 @@
-(defproject lein-vanity "0.1.0-SNAPSHOT"
+(defproject lein-vanity "0.1.0"
   :description "Vanity clojure LOC metrics plugin for leiningen"
   :url "https://github.com/dgtized/lein-vanity"
   :license {:name "MIT"
