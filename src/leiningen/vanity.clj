@@ -50,10 +50,13 @@
   "Lines of code statistics for vanity's sake"
   [project]
   (let [source (mapcat path-stats (:source-paths project))
+        cljs (mapcat path-stats (cljs-files project))
         test (mapcat path-stats (:test-paths project))
         all [source
-             (subtotal "- Subtotal Source" source)
+             (subtotal "- Subtotal Clojure" source)
+             cljs
+             (subtotal "- Subtotal ClojureScript" cljs)
              test
              (subtotal "- Subtotal Test" test)
-             (subtotal "- Total" (concat source test))]]
+             (subtotal "- Total" (concat source test cljs))]]
     (print-table (flatten all))))
