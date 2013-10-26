@@ -41,6 +41,11 @@
       '()
       (assoc subtotals :source source-name))))
 
+(defn cljs-files [project]
+  (let [builds (get-in project [:cljsbuild :builds] [])
+        source-maps (if (map? builds) (vals builds) builds)]
+    (mapcat #(get % :source-paths) source-maps)))
+
 (defn vanity
   "Lines of code statistics for vanity's sake"
   [project]
