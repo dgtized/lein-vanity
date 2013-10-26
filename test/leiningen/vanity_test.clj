@@ -1,4 +1,4 @@
-(ns leiningen.test.vanity
+(ns leiningen.vanity-test
   (:use clojure.test
         leiningen.vanity))
 
