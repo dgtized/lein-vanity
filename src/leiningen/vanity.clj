@@ -30,11 +30,10 @@
        (filter #(or (.endsWith % ".clj")
                     (.endsWith % ".cljs")))))
 
-(defn path-stats [path]
+(defn relative-files [path]
   (let [relative-cwd (partial relative-file
-                              (-> "" io/file .getAbsoluteFile str))
-        files (map relative-cwd (files-in-path path))]
-    (map #(-> (io/file %1) line-stats) files)))
+                              (-> "" io/file .getAbsoluteFile str))]
+    (map relative-cwd (files-in-path path))))
 
 (defn subtotal
   "Return a subtotal for all numeric stats and rename source"
@@ -50,10 +49,10 @@
         source-maps (if (map? builds) (vals builds) builds)]
     (mapcat #(get % :source-paths) source-maps)))
 
-(defn stats [path]
-  (->> (mapcat path-stats path)
-       distinct
-       (sort-by #(get % :source))))
+(defn stats [paths]
+  (->> (mapcat relative-files paths)
+       sort distinct
+       (map #(-> (io/file %1) line-stats))))
 
 (defn vanity
   "Lines of code statistics for vanity's sake"
