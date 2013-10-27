@@ -50,12 +50,17 @@
         source-maps (if (map? builds) (vals builds) builds)]
     (mapcat #(get % :source-paths) source-maps)))
 
+(defn stats [path]
+  (->> (mapcat path-stats path)
+       distinct
+       (sort-by #(get % :source))))
+
 (defn vanity
   "Lines of code statistics for vanity's sake"
   [project]
-  (let [source (distinct (mapcat path-stats (:source-paths project)))
-        cljs (distinct  (mapcat path-stats (cljs-files project)))
-        test (distinct (mapcat path-stats (:test-paths project)))
+  (let [source (stats (:source-paths project))
+        cljs (stats (cljs-files project))
+        test (stats (:test-paths project))
         all [source
              (subtotal "- Subtotal Clojure" source)
              cljs
