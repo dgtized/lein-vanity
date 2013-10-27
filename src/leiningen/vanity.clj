@@ -16,7 +16,7 @@
         :else :LOC))
 
 (defn line-stats [file]
-  (with-open [rdr (clojure.java.io/reader file)]
+  (with-open [rdr (io/reader file)]
     (reduce (fn [counts line]
               (update-in counts [(kind-of line)] inc))
             {:source (str file)
