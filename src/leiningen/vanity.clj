@@ -33,11 +33,8 @@
 (defn path-stats [path]
   (let [relative-cwd (partial relative-file
                               (-> "" io/file .getAbsoluteFile str))
-        namespaces (b/namespaces-in-dir path)
-        files (map b/path-for namespaces)]
-    (map #(-> (io/file path %1)
-              line-stats
-              (update-in [:source] relative-cwd)) files)))
+        files (map relative-cwd (files-in-path path))]
+    (map #(-> (io/file %1) line-stats) files)))
 
 (defn subtotal
   "Return a subtotal for all numeric stats and rename source"
@@ -56,9 +53,9 @@
 (defn vanity
   "Lines of code statistics for vanity's sake"
   [project]
-  (let [source (mapcat path-stats (:source-paths project))
-        cljs (mapcat path-stats (cljs-files project))
-        test (mapcat path-stats (:test-paths project))
+  (let [source (distinct (mapcat path-stats (:source-paths project)))
+        cljs (distinct  (mapcat path-stats (cljs-files project)))
+        test (distinct (mapcat path-stats (:test-paths project)))
         all [source
              (subtotal "- Subtotal Clojure" source)
              cljs
