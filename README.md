@@ -6,21 +6,26 @@ Lines of code statistics for vanity's sake
 
 Modify `~/.lein/profiles.clj` to include:
 ```clojure
-{:user {:plugins [[lein-vanity "0.1.0"]]}}
+{:user {:plugins [[lein-vanity "0.2.0"]]}}
 ```
 
 ## Usage
 
 ```
 $ lein vanity
-=========================================================
-:source                        | :LOC | :comment | :blank
-=========================================================
-src/leiningen/vanity.clj       | 48   | 0        | 6
-test/leiningen/test/vanity.clj | 15   | 0        | 2
-- Total                        | 63   | 0        | 8
-=========================================================
+|                        :source | :LOC | :comment | :blank |
+|--------------------------------+------+----------+--------|
+|       src/leiningen/vanity.clj |   61 |        0 |      9 |
+| test/leiningen/vanity_test.clj |   23 |        0 |      3 |
+|                        - Total |   84 |        0 |     12 |
 ```
+
+## CLJS Support
+
+Limited support for CLJS if using some forms of `lein-cljsbuild`
+configuration in the `project.clj`. The intent is to limit statistics
+to only those files in `:source-paths`, and `:test-paths` with a
+`.clj` or `.cljs` extension.
 
 ## License
 
