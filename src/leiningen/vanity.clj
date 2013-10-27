@@ -23,6 +23,13 @@
              :LOC 0 :comment 0 :blank 0}
             (line-seq rdr))))
 
+(defn files-in-path [path]
+  (->> (file-seq (io/file path))
+       (filter #(.isFile %))
+       (map #(.getPath %))
+       (filter #(or (.endsWith % ".clj")
+                    (.endsWith % ".cljs")))))
+
 (defn path-stats [path]
   (let [relative-cwd (partial relative-file
                               (-> "" io/file .getAbsoluteFile str))
