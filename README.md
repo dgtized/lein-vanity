@@ -29,6 +29,6 @@ to only those files in `:source-paths`, and `:test-paths` with a
 
 ## License
 
-Copyright © 2012 Charles L.G. Comstock
+Copyright © 2012-2013 Charles L.G. Comstock
 
 Distributed under the MIT Public License, see LICENSE file
