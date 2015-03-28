@@ -8,7 +8,7 @@
   [base path]
   (-> path
       (clojure.string/replace-first (str base) "")
-      (clojure.string/replace-first #"^/" "")))
+      (clojure.string/replace-first #"^(/|\\)" "")))
 
 (defn kind-of [line]
   (cond (re-find #"^\s*;" line) :comment
