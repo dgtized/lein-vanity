@@ -28,7 +28,8 @@
        (filter #(.isFile %))
        (map #(.getPath %))
        (filter #(or (.endsWith % ".clj")
-                    (.endsWith % ".cljs")))))
+                    (.endsWith % ".cljs")
+                    (.endsWith % ".cljc")))))
 
 (defn relative-files [path]
   (let [relative-cwd (partial relative-file
