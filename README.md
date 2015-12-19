@@ -2,6 +2,7 @@
 
 Lines of code statistics for vanity's sake
 
+[![Clojars Project](http://clojars.org/lein-vanity/latest-version.svg)](http://clojars.org/lein-vanity)
 [![Build Status](https://travis-ci.org/dgtized/lein-vanity.svg)](https://travis-ci.org/dgtized/lein-vanity)
 
 ## Install
