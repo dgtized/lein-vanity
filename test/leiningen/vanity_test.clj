@@ -22,5 +22,5 @@
   (is (= '("src-cljs")
          (cljs-files {:cljsbuild {:builds [{:source-paths ["src-cljs"]}]}})))
   (is (= '("A" "B")
-         (cljs-files {:cljsbuild {:builds {:main {:source-paths ["A"]}
-                                           :second {:source-paths ["B"]}}}}))))
+         (sort (cljs-files {:cljsbuild {:builds {:main {:source-paths ["A"]}
+                                                 :second {:source-paths ["B"]}}}})))))
