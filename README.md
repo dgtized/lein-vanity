@@ -7,7 +7,9 @@ Lines of code statistics for vanity's sake
 
 ## Install
 
-Modify `~/.lein/profiles.clj` to include:
+Modify the [leiningen](http://leiningen.org) user-profile,
+`~/.lein/profiles.clj` to include:
+
 ```clojure
 {:user {:plugins [[lein-vanity "0.2.0"]]}}
 ```
